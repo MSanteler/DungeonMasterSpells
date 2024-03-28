@@ -3,7 +3,20 @@
     <version major="4" minor="0" revision="6" build="5" />
     <region id="Templates">
         <node id="Templates">
-            <children>        
+            <children>
+				<node id="GameObjects">
+					<attribute id="Icon" type="FixedString" value="Item_LOOT_GEN_Ring_F_Gold_A_1" />
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="MapKey" type="FixedString" value="e74e9812-5838-46d6-925d-01b72307f1fd" />
+					<attribute id="Name" type="LSString" value="DMSP_DM_RING" />
+					<attribute id="ParentTemplateId" type="FixedString" value="66dc3535-3757-403b-8236-de380bf3f4ca" />
+					<attribute id="Type" type="FixedString" value="item" />
+					<attribute id="Stats" type="FixedString" value="DMSP_DM_RING" />
+					<attribute id="_OriginalFileVersion_" type="int64" value="144115188075855919" />
+					<children>
+						<node id="GameMaster" />
+					</children>
+				</node>
             </children>
         </node>
     </region>

@@ -9,21 +9,43 @@ local function OnSessionLoaded()
     Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "after", function(_, _)
         local Party = Osi.DB_PartyMembers:Get(nil)
         for i = #Party, 1, -1 do 
-            AddPlaceCreatureSpells(Party[i][1])
+            AddDMSpells(Party[i][1])
         end
     end)
 
     Ext.Osiris.RegisterListener("CharacterJoinedParty", 1, "after", function(character)
-        AddPlaceCreatureSpells(character)
+        AddDMSpells(character)
     end)
 
-    function AddPlaceCreatureSpells(target)
+    function AddDMSpells(target)
         for _, container in ipairs(SPELL_CONTAINERS) do
             if Osi.HasSpell(target, container) == 0 then
                 Osi.AddSpell(target, container, 1, 1)
             end
         end
     end
+
+    function RemoveDMSpells(target)
+        for _, container in ipairs(SPELL_CONTAINERS) do
+            if Osi.HasSpell(target, container) == 1 then
+                Osi.RemoveSpell(target, container, 1)
+            end
+        end
+    end
+
+    -------------------------------------------- Give Dm Spells ---------------------------------------
+    Ext.Osiris.RegisterListener("StatusApplied", 4, "before", function(target, statusID, source, _)
+        if statusID == "STATUS_DMSP_Util_ISDM" then
+            print("Status STATUS_DMSP_Util_ISDM: " .. target)
+            AddDMSpells(target)
+        end
+    end)
+    Ext.Osiris.RegisterListener("StatusRemoved", 4, "after", function(target, statusID, source, _)
+        if statusID == "STATUS_DMSP_Util_ISDM" then
+            print("Status off STATUS_DMSP_Util_ISDM: " .. target)
+            RemoveDMSpells(target)
+        end
+    end)
 
     ------------------------------------------------- Place Creature ---------------------------------------
     Ext.Osiris.RegisterListener("UsingSpellAtPosition", 8, "after", function(caster, x, y, z, spell, spellType, spellElement, storyActionID)
@@ -60,6 +82,7 @@ local function OnSessionLoaded()
         end
     end)
 
+    -------------------------------------------- Update Follower ---------------------------------------
     Ext.Osiris.RegisterListener("StatusApplied", 4, "before", function(target, statusID, source, _)
         if statusID == "STATUS_DMSP_Util_MakeFollow" then
             Osi.AddPartyFollower(target, source)
